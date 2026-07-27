@@ -1,0 +1,132 @@
+{
+  "headerBadge": "Panduan Resmi • KLH / BPLH (Desember 2025)",
+  "docTitle": "Cheat Sheet: Metode Valuasi Ekonomi Jasa Ekosistem",
+  "docDescription": "Ringkasan cepat seluruh metode valuasi ekonomi jasa ekosistem pada <em>Panduan Integrasi Valuasi Ekonomi Lingkungan Hidup dalam Persetujuan Lingkungan</em> (KLH/BPLH, Desember 2025), Bab 5-6. Dokumen ini memilih pendekatan <strong>ecosystem accounting</strong>, sehingga hanya 6 metode berikut yang dijabarkan lengkap dengan rumus dan studi kasus. Metode TEV lain yang hanya disebut sekilas di Tabel 7 dokumen (travel cost, hedonic pricing, contingent valuation, choice modelling, contingent ranking, deliberative group valuation) tidak dimasukkan karena melibatkan consumer surplus dan tidak sejalan dengan pendekatan ecosystem accounting yang dipakai panduan ini.",
+  "section1Title": "Tabel 1. Matriks Ringkasan Metode Valuasi",
+  "section2Title": "Tabel 2. Perbandingan Cepat Antar Metode",
+  "notesTitle": "Catatan Penting Methodologis",
+  "matrixTable": [
+    {
+      "metode": "Resource Rent (Harga Pasar)",
+      "jenisJasa": "Provisioning Services dan Cultural Services",
+      "digunakanKetika": "Terdapat harga pasar untuk jasa ekosistem yang dimanfaatkan, baik untuk kebutuhan sendiri maupun dijual/dibayar (misal tiket wisata)",
+      "formula": "RR = TR − (IC + CE + CC)",
+      "formulaDesc": "TR: pendapatan total; IC: biaya bahan produksi; CE: biaya tenaga kerja; CC: biaya penyusutan alat",
+      "dataDibutuhkan": "• Volume produksi/panen atau jumlah pengunjung<br>• Harga jual atau harga tiket<br>• Biaya tenaga kerja<br>• Biaya bahan produksi/operasional<br>• Biaya penyusutan alat",
+      "contohPenerapan": "• Produksi ikan dan udang silvofishery Blanakan, Subang<br>• Produksi rotan hutan sekunder Kalimantan Tengah<br>• Wisata alam TWA Sumber Semen, Rembang",
+      "kelebihan": "<span class=\"check-item\">✓</span> Rumus sederhana dan intuitif<br><span class=\"check-item\">✓</span> Data pendapatan-biaya bisa digali langsung dari beneficiaries<br><span class=\"check-item\">✓</span> Cocok untuk jasa yang sudah punya pasar nyata",
+      "keterbatasan": "<span class=\"cross-item\">✗</span> Butuh rincian biaya operasional yang akurat<br><span class=\"cross-item\">✗</span> Tidak berlaku untuk jasa tanpa harga pasar<br><span class=\"cross-item\">✗</span> Responden sering sulit merinci pendapatan per jenis produk"
+    },
+    {
+      "metode": "Production Function",
+      "jenisJasa": "Provisioning Services",
+      "digunakanKetika": "Jasa ekosistem menjadi input produksi, tapi tidak punya harga pasar sendiri; nilainya didekati lewat harga pasar produk akhir",
+      "formula": "NA = R × NP",
+      "formulaDesc": "NA: nilai air (IDR/ha/panen); R: rasio kontribusi terhadap produksi (%); NP: nilai produksi pertanian/perikanan (IDR/ha/panen)",
+      "dataDibutuhkan": "• Debit mata air/sungai<br>• Kebutuhan air irigasi per siklus<br>• Luas area yang teraliri<br>• Hasil panen dan harga jual<br>• Rasio kontribusi air terhadap produksi",
+      "contohPenerapan": "Air irigasi sawah di sekitar CAT Watuputih, Rembang",
+      "kelebihan": "<span class=\"check-item\">✓</span> Bisa menilai jasa tanpa harga pasar langsung<br><span class=\"check-item\">✓</span> Memanfaatkan harga pasar produk akhir yang sudah tersedia<br><span class=\"check-item\">✓</span> Menghubungkan manfaat ekosistem dengan hasil produksi nyata",
+      "keterbatasan": "<span class=\"cross-item\">✗</span> Sulit memisahkan kontribusi murni ekosistem dari input produksi lain<br><span class=\"cross-item\">✗</span> Rasio kontribusi umumnya dari penelitian lain, bukan pengukuran langsung<br><span class=\"cross-item\">✗</span> Perlu analisis spasial tambahan untuk menentukan area yang benar-benar terlayani"
+    },
+    {
+      "metode": "Damage Costs",
+      "jenisJasa": "Regulating Services (serapan dan simpanan karbon)",
+      "digunakanKetika": "Ingin mengestimasi nilai kerugian akibat hilangnya jasa ekosistem, direpresentasikan sebagai biaya yang bisa dihindari (avoided cost) bila ekosistem tetap terjaga",
+      "formula": "Serapan: NSC = A × NEP × SCC | Simpanan: NSCH = ΔCS × SCC",
+      "formulaDesc": "A: luas ekosistem; NEP: net ecosystem productivity; ΔCS: perubahan simpanan karbon; SCC: social cost of carbon",
+      "dataDibutuhkan": "• Luas dan tipe ekosistem<br>• Nilai NEP tahunan per tipe ekosistem<br>• Data simpanan karbon (pengukuran plot lapangan atau nilai rujukan literatur)<br>• Nilai SCC dan discount rate<br>• Kurs USD ke IDR",
+      "contohPenerapan": "Simpanan karbon (Aboveground Carbon) mangrove TWA Angke Kapuk, Jakarta",
+      "kelebihan": "<span class=\"check-item\">✓</span> Nilai SCC sudah tersedia sebagai standar internasional (US EPA)<br><span class=\"check-item\">✓</span> Bisa diterapkan konsisten di berbagai tipe ekosistem<br><span class=\"check-item\">✓</span> Cocok untuk jasa karbon yang pasar perdagangannya belum berkembang luas",
+      "keterbatasan": "<span class=\"cross-item\">✗</span> Perlu pemodelan biaya kerusakan yang kompleks, baru tersedia mapan untuk karbon<br><span class=\"cross-item\">✗</span> Nilai SCC harus dikonversi kurs dan disesuaikan discount rate<br><span class=\"cross-item\">✗</span> Pengukuran simpanan karbon langsung di lapangan mahal dan memakan waktu"
+    },
+    {
+      "metode": "Mitigation Costs",
+      "jenisJasa": "Regulating Services (pengendalian erosi, pengendalian hama)",
+      "digunakanKetika": "Ingin mengetahui biaya pencegahan/pengurangan dampak negatif akibat hilang atau rusaknya jasa ekosistem",
+      "formula": "NPE = ΔET × BPS × SDR",
+      "formulaDesc": "ΔET: selisih jumlah erosi tanah (ton/tahun); BPS: biaya pengerukan sedimen (IDR/ton); SDR: sediment delivery ratio (%)",
+      "dataDibutuhkan": "• Peta tutupan lahan, curah hujan, jenis tanah, kelerengan<br>• Biaya pengerukan sedimen sungai<br>• Sediment delivery ratio<br>• Daya jelajah satwa dan biaya insektisida dengan/tanpa bantuan satwa (kasus hama)",
+      "contohPenerapan": "• Pengendalian erosi di DAS Winongo, Sleman<br>• Pengendalian hama serangga oleh kelelawar di CAT Watuputih",
+      "kelebihan": "<span class=\"check-item\">✓</span> Data biaya mitigasi (pengerukan, insektisida) relatif tersedia dari praktik nyata<br><span class=\"check-item\">✓</span> Cocok untuk jasa regulating yang manfaatnya tidak terlihat langsung di pasar<br><span class=\"check-item\">✓</span> Bisa memanfaatkan data historis before-after perubahan lahan",
+      "keterbatasan": "<span class=\"cross-item\">✗</span> Model pendugaan seperti USLE butuh banyak lapisan data spasial<br><span class=\"cross-item\">✗</span> Sensitif terhadap asumsi rasio (SDR, kontribusi satwa)<br><span class=\"cross-item\">✗</span> Kondisi \"tanpa gangguan\" sebagai pembanding tidak selalu tersedia"
+    },
+    {
+      "metode": "Replacement Costs",
+      "jenisJasa": "Regulating Services (penjernihan air, penahan gelombang/abrasi)",
+      "digunakanKetika": "Ingin menghitung biaya penggantian fungsi ekosistem, yaitu ketika jasa ekosistem bisa digantikan oleh teknologi atau pembangunan fasilitas tertentu",
+      "formula": "NJE = UE × BP",
+      "formulaDesc": "NJE: nilai jasa ekosistem (IDR); UE: ukuran ekosistem (ha atau meter); BP: biaya pembangunan + pemeliharaan per satuan ukuran",
+      "dataDibutuhkan": "• Ukuran/luas ekosistem yang rusak<br>• Biaya pembangunan fasilitas pengganti (tanggul, instalasi pengolahan air)<br>• Biaya pemeliharaan tahunan fasilitas",
+      "contohPenerapan": "Penahan gelombang dan abrasi oleh mangrove Bojong Salawe, Pangandaran",
+      "kelebihan": "<span class=\"check-item\">✓</span> Konsep mudah dipahami: biaya bangun infrastruktur pengganti<br><span class=\"check-item\">✓</span> Data biaya konstruksi umumnya tersedia dari studi kelayakan proyek serupa<br><span class=\"check-item\">✓</span> Sekaligus menilai ecosystem asset dan ecosystem service",
+      "keterbatasan": "<span class=\"cross-item\">✗</span> Asumsi kesetaraan fungsi ekosistem dengan infrastruktur buatan belum tentu akurat<br><span class=\"cross-item\">✗</span> Tidak semua jasa ekosistem punya padanan teknologi pengganti<br><span class=\"cross-item\">✗</span> Estimasi biaya pemeliharaan jangka panjang sulit dipastikan"
+    },
+    {
+      "metode": "Rehabilitation Costs",
+      "jenisJasa": "Cultural Services (Habitat Services)",
+      "digunakanKetika": "Ingin menghitung biaya pemulihan habitat/spesies yang rusak, untuk jasa yang sulit dinilai dengan metode berbasis pasar seperti keanekaragaman hayati",
+      "formula": "NH = UE × BP",
+      "formulaDesc": "NH: nilai habitat (IDR); UE: ukuran ekosistem (ha); BP: biaya rehabilitasi + pemeliharaan per satuan ukuran",
+      "dataDibutuhkan": "• Luas habitat yang rusak<br>• Biaya rehabilitasi ekosistem/pembangunan pusat rehabilitasi<br>• Biaya perawatan<br>• Biaya reintroduksi dan monitoring per satwa<br>• Data populasi",
+      "contohPenerapan": "Habitat orangutan di TN Tanjung Puting, Kalimantan Tengah",
+      "kelebihan": "<span class=\"check-item\">✓</span> Bisa menilai keanekaragaman hayati tanpa menghitung consumer surplus (WTP)<br><span class=\"check-item\">✓</span> Data biaya rehabilitasi bisa didapat dari lembaga konservasi terkait<br><span class=\"check-item\">✓</span> Sejalan dengan prinsip ecosystem accounting",
+      "keterbatasan": "<span class=\"cross-item\">✗</span> Data biaya pembangunan pusat rehabilitasi sering tidak lengkap<br><span class=\"cross-item\">✗</span> Nilai yang dihasilkan berpotensi under-estimate bila ada komponen biaya hilang<br><span class=\"cross-item\">✗</span> Sulit diterapkan untuk spesies tanpa program rehabilitasi yang jelas"
+    }
+  ],
+  "compareTable": [
+    {
+      "metode": "Resource Rent",
+      "hargaPasar": "<span class=\"check-item\">✓</span>",
+      "pendapatan": "<span class=\"check-item\">✓</span>",
+      "biaya": "<span class=\"cross-item\">✗</span>",
+      "kesulitan": "Mudah",
+      "kebutuhanData": "Sedang"
+    },
+    {
+      "metode": "Production Function",
+      "hargaPasar": "<span class=\"cross-item\">✗</span>",
+      "pendapatan": "<span class=\"check-item\">✓</span>",
+      "biaya": "<span class=\"cross-item\">✗</span>",
+      "kesulitan": "Sedang",
+      "kebutuhanData": "Sedang"
+    },
+    {
+      "metode": "Damage Costs",
+      "hargaPasar": "<span class=\"cross-item\">✗</span>",
+      "pendapatan": "<span class=\"cross-item\">✗</span>",
+      "biaya": "<span class=\"check-item\">✓</span>",
+      "kesulitan": "Sulit",
+      "kebutuhanData": "Tinggi"
+    },
+    {
+      "metode": "Mitigation Costs",
+      "hargaPasar": "<span class=\"cross-item\">✗</span>",
+      "pendapatan": "<span class=\"cross-item\">✗</span>",
+      "biaya": "<span class=\"check-item\">✓</span>",
+      "kesulitan": "Sulit",
+      "kebutuhanData": "Tinggi"
+    },
+    {
+      "metode": "Replacement Costs",
+      "hargaPasar": "<span class=\"cross-item\">✗</span>",
+      "pendapatan": "<span class=\"cross-item\">✗</span>",
+      "biaya": "<span class=\"check-item\">✓</span>",
+      "kesulitan": "Sedang",
+      "kebutuhanData": "Sedang"
+    },
+    {
+      "metode": "Rehabilitation Costs",
+      "hargaPasar": "<span class=\"cross-item\">✗</span>",
+      "pendapatan": "<span class=\"cross-item\">✗</span>",
+      "biaya": "<span class=\"check-item\">✓</span>",
+      "kesulitan": "Sedang",
+      "kebutuhanData": "Tinggi"
+    }
+  ],
+  "notes": [
+    "<strong>Resource Rent</strong> dipakai dua kali dalam dokumen dengan rumus identik: untuk provisioning services (Bab 5.1, studi kasus 6.1) dan cultural services/wisata alam (Bab 5.6, studi kasus 6.6).",
+    "Tabel 8 dokumen (hal. 20) turut mencantumkan Resource Rent untuk regulating services (karbon, jika market exists), tetapi tidak dijabarkan dengan studi kasus tersendiri di Bab 5-6 sehingga tidak dibuat baris terpisah.",
+    "<strong>Rehabilitation Costs</strong> pada studi kasus habitat orangutan (Bab 6.7) disebut dokumen sebagai \"Rehabilitation and Reintroduction Costs\" karena menambahkan komponen biaya reintroduksi dan monitoring satwa.",
+    "Kolom Kelebihan dan Keterbatasan merupakan sintesis berdasarkan karakteristik dan kebutuhan data tiap metode seperti dijelaskan di dokumen, bukan kutipan langsung (dokumen sumber tidak mencantumkan daftar kelebihan/keterbatasan eksplisit)."
+  ]
+}
