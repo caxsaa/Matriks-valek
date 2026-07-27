@@ -1,5 +1,5 @@
 /* ==========================================================================
-   EcoVal Document Editor - MINIMALIST AESTHETIC
+   EcoVal Document Editor - MINIMALIST AESTHETIC (FIXED VERSION)
    Focus: Typography, Whitespace, Monochromatic Accents, Flat UI
    ========================================================================== */
 
@@ -161,7 +161,7 @@ body {
     padding: 20mm 20mm;
     border: 1px solid var(--border-light);
     border-radius: 4px;
-    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.03); /* Extremely soft shadow */
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.03);
 }
 [data-theme="dark"] .document-page { box-shadow: none; }
 
@@ -193,7 +193,6 @@ body {
     color: var(--text-muted);
     line-height: 1.6;
     outline: none;
-    max-width: 90%;
 }
 
 /* Section Header */
@@ -211,10 +210,18 @@ body {
 }
 
 /* ==========================================================================
-   Clean Minimalist Tables
+   Clean Minimalist Tables (FIXED)
    ========================================================================== */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Ini yang tadinya hilang, sekarang bisa digeser! */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px; /* Ruang untuk scrollbar */
+}
+
 .table-minimal {
     width: 100%;
+    min-width: 1100px; /* Paksa tabel tetap lebar, tidak tergencet */
     border-collapse: collapse;
     font-size: 8pt;
 }
@@ -225,14 +232,13 @@ body {
     letter-spacing: 0.5px;
     font-size: 7.5pt;
     color: var(--text-muted);
-    padding: 10px 12px;
+    padding: 12px 14px;
     border-bottom: 1px solid var(--border-dark);
     text-align: left;
-    min-width: 100px;
 }
 
 .table-minimal td {
-    padding: 12px 12px;
+    padding: 14px 14px;
     border-bottom: 1px solid var(--border-light);
     vertical-align: top;
 }
@@ -245,7 +251,7 @@ body {
 }
 
 /* Actions in Table */
-.col-action-head { text-align: center; width: 45px !important; min-width: 45px !important; }
+.col-action-head { text-align: center; width: 50px !important; min-width: 50px !important; }
 .cell-actions {
     display: flex; flex-direction: column; gap: 4px; align-items: center;
     opacity: 0; transition: opacity 0.2s;
@@ -321,6 +327,8 @@ tr:hover .cell-actions { opacity: 1; }
     body { background: #fff !important; color: #000 !important; }
     .workspace-container { padding: 0 !important; }
     .document-page { width: 100% !important; border: none !important; padding: 0 !important; box-shadow: none !important; }
+    .table-responsive { overflow: visible !important; }
+    .table-minimal { min-width: 100% !important; }
     .table-minimal th { color: #000 !important; border-bottom: 2px solid #000 !important; }
     .table-minimal td { border-bottom: 1px solid #ddd !important; }
     tr { page-break-inside: avoid !important; }
