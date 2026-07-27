@@ -1,7 +1,6 @@
 /**
- * EcoVal Document Editor - Engine Utama Aplikasi (Versi Final & Patched)
- * Memperbaiki Bug "Tambah Kolom" dengan TRUE State-Driven Rendering.
- * Menambahkan Fitur "Hapus Kolom Terakhir".
+ * EcoVal Document Editor - Patched Engine (Anti-Crash Version)
+ * Bugfix: Melindungi Event Listeners dari elemen HTML yang hilang (seperti tombol Print).
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -38,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isEditing: false
     };
 
-    // Cache Elemen DOM
+    // Cache Elemen DOM (Aman jika ada elemen yang tidak ditemukan / null)
     const DOM = {
         documentPage: document.getElementById('documentPage'),
         tblMatrixHeadRow: document.getElementById('tblMatrixHeadRow'),
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnImportJson: document.getElementById('btnImportJson'),
         fileInputJson: document.getElementById('fileInputJson'),
         btnExportPdf: document.getElementById('btnExportPdf'),
-        btnPrint: document.getElementById('btnPrint'),
+        btnPrint: document.getElementById('btnPrint'), // Mungkin Null di versi Minimalis
         btnUndo: document.getElementById('btnUndo'),
         btnRedo: document.getElementById('btnRedo'),
         btnThemeToggle: document.getElementById('btnThemeToggle'),
@@ -72,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     let bsToast = null;
-    if (typeof bootstrap !== 'undefined') {
+    if (typeof bootstrap !== 'undefined' && DOM.toastElement) {
         bsToast = new bootstrap.Toast(DOM.toastElement);
     }
 
@@ -144,12 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderDocument() {
         if (!AppState.data || AppState.isEditing) return;
 
-        document.querySelector('[data-key="headerBadge"]').innerHTML = sanitizeHTML(AppState.data.headerBadge || '');
-        document.querySelector('[data-key="docTitle"]').innerHTML = sanitizeHTML(AppState.data.docTitle || '');
-        document.querySelector('[data-key="docDescription"]').innerHTML = sanitizeHTML(AppState.data.docDescription || '');
-        document.querySelector('[data-key="section1Title"]').innerHTML = sanitizeHTML(AppState.data.section1Title || '');
-        document.querySelector('[data-key="section2Title"]').innerHTML = sanitizeHTML(AppState.data.section2Title || '');
-        document.querySelector('[data-key="notesTitle"]').innerHTML = sanitizeHTML(AppState.data.notesTitle || '');
+        if (document.querySelector('[data-key="headerBadge"]')) document.querySelector('[data-key="headerBadge"]').innerHTML = sanitizeHTML(AppState.data.headerBadge || '');
+        if (document.querySelector('[data-key="docTitle"]')) document.querySelector('[data-key="docTitle"]').innerHTML = sanitizeHTML(AppState.data.docTitle || '');
+        if (document.querySelector('[data-key="docDescription"]')) document.querySelector('[data-key="docDescription"]').innerHTML = sanitizeHTML(AppState.data.docDescription || '');
+        if (document.querySelector('[data-key="section1Title"]')) document.querySelector('[data-key="section1Title"]').innerHTML = sanitizeHTML(AppState.data.section1Title || '');
+        if (document.querySelector('[data-key="section2Title"]')) document.querySelector('[data-key="section2Title"]').innerHTML = sanitizeHTML(AppState.data.section2Title || '');
+        if (document.querySelector('[data-key="notesTitle"]')) document.querySelector('[data-key="notesTitle"]').innerHTML = sanitizeHTML(AppState.data.notesTitle || '');
 
         renderDynamicTable('tblMatrix', DOM.tblMatrixHeadRow, DOM.tblMatrixBody, AppState.data.matrixHeaders, AppState.data.matrixTable);
         renderDynamicTable('tblCompare', DOM.tblCompareHeadRow, DOM.tblCompareBody, AppState.data.compareHeaders, AppState.data.compareTable);
@@ -157,6 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderDynamicTable(tableId, headRowEl, bodyEl, headersData, tableData) {
+        if (!headRowEl || !bodyEl) return;
+        
         if (headersData && headersData.length > 0) {
             headRowEl.innerHTML = '';
             headersData.forEach(hdr => {
@@ -175,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const currentHeaders = Array.from(headRowEl.querySelectorAll('th')).map(th => th.dataset.field);
-
         bodyEl.innerHTML = '';
         if (!tableData) return;
 
@@ -219,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderNotesList() {
+        if (!DOM.notesList) return;
         DOM.notesList.innerHTML = '';
         if (!AppState.data.notes) return;
 
@@ -238,6 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Delegation & Autosave Logic
     // ==========================================================================
     function setupGlobalEventDelegation() {
+        if(!DOM.documentPage) return;
+        
         DOM.documentPage.addEventListener('input', (e) => {
             if (e.target.isContentEditable || e.target.getAttribute('contenteditable') === 'true') {
                 AppState.isEditing = true;
@@ -286,6 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function extractTableData(headRowId, bodyId) {
         const thead = document.getElementById(headRowId);
         const tbody = document.getElementById(bodyId);
+        if(!thead || !tbody) return { headers: [], rows: [] };
         
         const headers = Array.from(thead.querySelectorAll('th')).map(th => ({
             html: sanitizeHTML(th.innerHTML),
@@ -333,15 +337,18 @@ document.addEventListener('DOMContentLoaded', () => {
         newData.compareTable = compareData.rows;
 
         const notes = [];
-        DOM.notesList.querySelectorAll('.note-text').forEach(span => {
-            notes.push(sanitizeHTML(span.innerHTML));
-        });
+        if(DOM.notesList) {
+            DOM.notesList.querySelectorAll('.note-text').forEach(span => {
+                notes.push(sanitizeHTML(span.innerHTML));
+            });
+        }
         newData.notes = notes;
 
         return newData;
     }
 
     function triggerAutoSave() {
+        if(!DOM.saveStatusText) return;
         DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-warning me-1"></i> Menyimpan...';
         clearTimeout(AppState.autoSaveTimer);
         AppState.autoSaveTimer = setTimeout(() => {
@@ -395,12 +402,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUndoRedoUI() {
-        DOM.btnUndo.disabled = AppState.historyIndex <= 0;
-        DOM.btnRedo.disabled = AppState.historyIndex >= AppState.history.length - 1;
+        if(DOM.btnUndo) DOM.btnUndo.disabled = AppState.historyIndex <= 0;
+        if(DOM.btnRedo) DOM.btnRedo.disabled = AppState.historyIndex >= AppState.history.length - 1;
     }
 
     // ==========================================================================
-    // Operasi Tabel: Tambah & Hapus Kolom / Baris (State-Driven)
+    // Operasi Tabel: Tambah Kolom & Baris
     // ==========================================================================
     
     function addColumn(tableId) {
@@ -447,13 +454,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let targetTable = tableId === 'tblMatrix' ? AppState.data.matrixTable : AppState.data.compareTable;
         let targetHeaders = tableId === 'tblMatrix' ? AppState.data.matrixHeaders : AppState.data.compareHeaders;
         
-        // Minimal harus ada 2 kolom sisa (1 kolom data + 1 kolom Aksi)
         if (!targetHeaders || targetHeaders.length <= 2) {
             showToast('Tabel harus menyisakan setidaknya satu kolom data.', 'warning');
             return;
         }
 
-        // Cari kolom terakhir yang bukan kolom "Aksi"
         let lastColIndex = -1;
         for (let i = targetHeaders.length - 1; i >= 0; i--) {
             if (!targetHeaders[i].isAction && targetHeaders[i].field !== 'action') {
@@ -467,22 +472,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const colToDelete = targetHeaders[lastColIndex];
         const colName = colToDelete.html.replace(/<[^>]+>/g, '').trim() || 'Kolom Tanpa Nama';
 
-        if (confirm(`Hapus kolom "${colName}" beserta seluruh isinya secara permanen?`)) {
-            // Hapus dari Headers
+        if (confirm(`Hapus kolom "${colName}" beserta isinya?`)) {
             targetHeaders.splice(lastColIndex, 1);
-            
-            // Hapus properti dari seluruh baris data
-            if (targetTable) {
-                targetTable.forEach(row => {
-                    delete row[colToDelete.field];
-                });
-            }
+            if (targetTable) targetTable.forEach(row => delete row[colToDelete.field]);
 
             AppState.isEditing = false;
             renderDocument();
             pushHistoryState();
             triggerAutoSave();
-            showToast(`Kolom "${colName}" berhasil dihapus.`, 'warning');
+            showToast(`Kolom dihapus.`, 'warning');
         }
     }
 
@@ -516,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDocument();
         pushHistoryState();
         triggerAutoSave();
-        showToast('Baris telah dihapus secara permanen.', 'warning');
+        showToast('Baris telah dihapus.', 'warning');
     }
 
     function duplicateRow(tableId, index) {
@@ -536,11 +534,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // Event Listeners Delegasi & Tombol
+    // Event Listeners Aman dari Crash
     // ==========================================================================
     function setupToolbarEvents() {
-        DOM.btnSave.addEventListener('click', () => saveToLocalStorage(true));
-        DOM.btnLoad.addEventListener('click', () => {
+        if(DOM.btnSave) DOM.btnSave.addEventListener('click', () => saveToLocalStorage(true));
+        if(DOM.btnLoad) DOM.btnLoad.addEventListener('click', () => {
             const saved = localStorage.getItem('ecoval_doc_data');
             if (saved) {
                 AppState.data = JSON.parse(saved);
@@ -550,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('Dimuat ulang dari LocalStorage', 'success');
             }
         });
-        DOM.btnReset.addEventListener('click', async () => {
+        if(DOM.btnReset) DOM.btnReset.addEventListener('click', async () => {
             if (confirm('Aksi ini akan menghapus semua perubahan dan mereset dokumen. Lanjutkan?')) {
                 localStorage.removeItem('ecoval_doc_data');
                 AppState.isEditing = false;
@@ -559,20 +557,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('Reset sistem berhasil.', 'info');
             }
         });
-        DOM.btnExportJson.addEventListener('click', exportToJsonFile);
-        DOM.btnImportJson.addEventListener('click', () => DOM.fileInputJson.click());
-        DOM.fileInputJson.addEventListener('change', importFromJsonFile);
-        DOM.btnPrint.addEventListener('click', () => window.print());
-        DOM.btnExportPdf.addEventListener('click', () => window.print());
-        DOM.btnUndo.addEventListener('click', undo);
-        DOM.btnRedo.addEventListener('click', redo);
-        DOM.btnThemeToggle.addEventListener('click', toggleTheme);
-        DOM.btnZoomIn.addEventListener('click', () => setZoom(10));
-        DOM.btnZoomOut.addEventListener('click', () => setZoom(-10));
-        DOM.searchInput.addEventListener('input', handleSearch);
-        DOM.btnClearSearch.addEventListener('click', clearSearch);
+        if(DOM.btnExportJson) DOM.btnExportJson.addEventListener('click', exportToJsonFile);
+        if(DOM.btnImportJson) DOM.btnImportJson.addEventListener('click', () => DOM.fileInputJson.click());
+        if(DOM.fileInputJson) DOM.fileInputJson.addEventListener('change', importFromJsonFile);
+        if(DOM.btnPrint) DOM.btnPrint.addEventListener('click', () => window.print());
+        if(DOM.btnExportPdf) DOM.btnExportPdf.addEventListener('click', () => window.print());
+        if(DOM.btnUndo) DOM.btnUndo.addEventListener('click', undo);
+        if(DOM.btnRedo) DOM.btnRedo.addEventListener('click', redo);
+        if(DOM.btnThemeToggle) DOM.btnThemeToggle.addEventListener('click', toggleTheme);
+        if(DOM.btnZoomIn) DOM.btnZoomIn.addEventListener('click', () => setZoom(10));
+        if(DOM.btnZoomOut) DOM.btnZoomOut.addEventListener('click', () => setZoom(-10));
+        if(DOM.searchInput) DOM.searchInput.addEventListener('input', handleSearch);
+        if(DOM.btnClearSearch) DOM.btnClearSearch.addEventListener('click', clearSearch);
 
-        // Delegasi Klik Untuk Kontrol Dinamis
+        // Delegasi Klik Untuk Tombol Tabel
         document.addEventListener('click', (e) => {
             const addRowBtn = e.target.closest('.btn-add-row');
             if (addRowBtn) return addRow(addRowBtn.dataset.table);
@@ -580,7 +578,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const addColBtn = e.target.closest('.btn-add-col');
             if (addColBtn) return addColumn(addColBtn.dataset.table);
 
-            // Trigger Delete Last Column
             const delColBtn = e.target.closest('.btn-del-col');
             if (delColBtn) return deleteLastColumn(delColBtn.dataset.table);
 
@@ -606,14 +603,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        document.getElementById('btnAddNote').addEventListener('click', () => {
-            AppState.data = extractDataFromDOM();
-            AppState.data.notes.push('Tulis catatan Anda di sini...');
-            AppState.isEditing = false;
-            renderDocument();
-            pushHistoryState();
-            triggerAutoSave();
-        });
+        const btnAddNote = document.getElementById('btnAddNote');
+        if(btnAddNote) {
+            btnAddNote.addEventListener('click', () => {
+                AppState.data = extractDataFromDOM();
+                AppState.data.notes.push('Tulis catatan Anda di sini...');
+                AppState.isEditing = false;
+                renderDocument();
+                pushHistoryState();
+                triggerAutoSave();
+            });
+        }
 
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey) {
@@ -639,11 +639,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState.data, null, 2));
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "Cheat_Sheet_Ekosistem_KLH.json");
+        downloadAnchor.setAttribute("download", "Cheat_Sheet_Ekosistem.json");
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        showToast('Selesai diekspor ke JSON', 'success');
+        showToast('Diekspor ke JSON', 'success');
     }
 
     function importFromJsonFile(e) {
@@ -657,19 +657,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderDocument();
                 pushHistoryState();
                 saveToLocalStorage(false);
-                showToast('Dokumen JSON berhasil diimpor', 'success');
+                showToast('JSON berhasil diimpor', 'success');
             } catch (err) {
-                showToast('Struktur JSON rusak atau tidak dikenali.', 'danger');
+                showToast('Struktur JSON tidak valid.', 'danger');
             }
         };
         reader.readAsText(file);
-        DOM.fileInputJson.value = '';
+        if(DOM.fileInputJson) DOM.fileInputJson.value = '';
     }
 
     // ==========================================================================
     // Fitur Pencarian Visual
     // ==========================================================================
     function handleSearch() {
+        if(!DOM.searchInput || !DOM.documentPage) return;
         const query = DOM.searchInput.value.trim().toLowerCase();
         clearSearchHighlights();
         if (!query) return;
@@ -686,15 +687,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        if (matches > 0) showToast(`Pencarian menemukan ${matches} kecocokan.`, 'dark');
+        if (matches > 0) showToast(`Ditemukan ${matches} kecocokan.`, 'dark');
     }
 
     function clearSearch() {
-        DOM.searchInput.value = '';
+        if(DOM.searchInput) DOM.searchInput.value = '';
         clearSearchHighlights();
     }
 
     function clearSearchHighlights() {
+        if(!DOM.documentPage) return;
         DOM.documentPage.querySelectorAll('mark.search-highlight').forEach(mark => {
             const parent = mark.parentNode;
             parent.replaceChild(document.createTextNode(mark.innerText), mark);
@@ -707,23 +709,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // UI Helpers (Theme, Zoom, Toasts)
+    // UI Helpers
     // ==========================================================================
     function toggleTheme() {
         const newTheme = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
         document.body.setAttribute('data-theme', newTheme);
         localStorage.setItem('ecoval_theme', newTheme);
-        DOM.themeIcon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        showToast(`Beralih ke mode ${newTheme === 'dark' ? 'Gelap' : 'Terang'}.`, 'dark');
+        if(DOM.themeIcon) DOM.themeIcon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        showToast(`Mode ${newTheme === 'dark' ? 'Gelap' : 'Terang'}.`, 'dark');
     }
 
     function loadThemePreference() {
         const savedTheme = localStorage.getItem('ecoval_theme') || 'light';
         document.body.setAttribute('data-theme', savedTheme);
-        DOM.themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        if(DOM.themeIcon) DOM.themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
 
     function setZoom(delta) {
+        if(!DOM.documentPage || !DOM.zoomLabel) return;
         AppState.currentZoom = Math.min(Math.max(AppState.currentZoom + delta, 70), 140);
         DOM.documentPage.style.transform = `scale(${AppState.currentZoom / 100})`;
         DOM.documentPage.style.transformOrigin = 'top center';
@@ -731,7 +734,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showToast(message, type = 'dark') {
-        if (!bsToast) return;
+        if (!bsToast || !DOM.toastMessage) return;
         DOM.toastMessage.textContent = message;
         const bgClass = type === 'success' ? 'bg-success' : type === 'warning' ? 'bg-warning text-dark' : type === 'danger' ? 'bg-danger' : 'bg-dark';
         DOM.toastElement.className = `toast align-items-center text-white ${bgClass} border-0 shadow-lg`;
