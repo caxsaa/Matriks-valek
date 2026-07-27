@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor Dokumen - Cheat Sheet: Metode Valuasi Ekonomi Jasa Ekosistem</title>
+    <title>Editor Dokumen - Cheat Sheet: Metode Valuasi Ekonomi</title>
     <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -17,56 +17,55 @@
 </head>
 <body data-theme="light">
 
-    <!-- Toolbar Editor -->
+    <!-- Minimalist Toolbar -->
     <header class="editor-toolbar-wrapper no-print">
-        <nav class="navbar navbar-expand-lg editor-toolbar shadow-sm" aria-label="Toolbar Editor Dokumen">
-            <div class="container-fluid px-3">
-                <a class="navbar-brand d-flex align-items-center me-3" href="#">
-                    <i class="fa-solid fa-file-invoice text-primary me-2 fs-4"></i>
-                    <span class="fw-bold fs-6 tracking-wide">EcoVal Editor</span>
+        <nav class="navbar navbar-expand-lg editor-toolbar" aria-label="Toolbar Editor Dokumen">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand d-flex align-items-center me-4" href="#">
+                    <i class="fa-solid fa-file-lines text-dark me-2 fs-5"></i>
+                    <span class="fw-semibold fs-6 tracking-wide text-dark">EcoVal</span>
                 </a>
                 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toolbarCollapse">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#toolbarCollapse">
+                    <i class="fa-solid fa-bars"></i>
                 </button>
 
                 <div class="collapse navbar-collapse" id="toolbarCollapse">
                     <div class="d-flex flex-wrap align-items-center gap-2 my-2 my-lg-0 me-auto">
-                        <div class="btn-group btn-group-sm shadow-sm">
-                            <button type="button" id="btnUndo" class="btn btn-outline-secondary" data-bs-toggle="tooltip" title="Urungkan (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
-                            <button type="button" id="btnRedo" class="btn btn-outline-secondary" data-bs-toggle="tooltip" title="Ulangi (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
+                        <div class="btn-group btn-group-sm flat-group">
+                            <button type="button" id="btnUndo" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Urungkan (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
+                            <button type="button" id="btnRedo" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Ulangi (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
                         </div>
-                        <div class="vr mx-1 d-none d-sm-block opacity-25"></div>
-                        <div class="btn-group btn-group-sm shadow-sm">
-                            <button type="button" id="btnSave" class="btn btn-outline-primary fw-medium" data-bs-toggle="tooltip" title="Simpan Data"><i class="fa-solid fa-floppy-disk me-1"></i> Simpan</button>
-                            <button type="button" id="btnLoad" class="btn btn-outline-secondary" data-bs-toggle="tooltip" title="Muat Data"><i class="fa-solid fa-folder-open me-1"></i> Muat</button>
-                            <button type="button" id="btnReset" class="btn btn-outline-danger" data-bs-toggle="tooltip" title="Reset Awal"><i class="fa-solid fa-arrow-rotate-left me-1"></i> Reset</button>
+                        <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
+                        <div class="btn-group btn-group-sm flat-group">
+                            <button type="button" id="btnSave" class="btn btn-minimal-primary" data-bs-toggle="tooltip" title="Simpan Data">Simpan</button>
+                            <button type="button" id="btnLoad" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Muat Data">Muat</button>
+                            <button type="button" id="btnReset" class="btn btn-outline-minimal text-danger" data-bs-toggle="tooltip" title="Reset Awal">Reset</button>
                         </div>
-                        <div class="vr mx-1 d-none d-sm-block opacity-25"></div>
-                        <div class="btn-group btn-group-sm shadow-sm">
-                            <button type="button" id="btnExportJson" class="btn btn-outline-dark" data-bs-toggle="tooltip" title="Ekspor JSON"><i class="fa-solid fa-file-export me-1"></i> JSON</button>
-                            <button type="button" id="btnImportJson" class="btn btn-outline-dark" data-bs-toggle="tooltip" title="Impor JSON"><i class="fa-solid fa-file-import me-1"></i> Impor</button>
+                        <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
+                        <div class="btn-group btn-group-sm flat-group">
+                            <button type="button" id="btnExportJson" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Ekspor JSON">JSON</button>
+                            <button type="button" id="btnImportJson" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Impor JSON">Impor</button>
                             <input type="file" id="fileInputJson" accept="application/json" class="d-none">
                         </div>
-                        <div class="vr mx-1 d-none d-sm-block opacity-25"></div>
-                        <div class="btn-group btn-group-sm shadow-sm">
-                            <button type="button" id="btnExportPdf" class="btn btn-success fw-medium" data-bs-toggle="tooltip" title="Ekspor PDF/Cetak"><i class="fa-solid fa-file-pdf me-1"></i> PDF</button>
-                            <button type="button" id="btnPrint" class="btn btn-outline-secondary" data-bs-toggle="tooltip" title="Cetak Manual"><i class="fa-solid fa-print"></i></button>
+                        <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
+                        <div class="btn-group btn-group-sm flat-group">
+                            <button type="button" id="btnExportPdf" class="btn btn-minimal-dark" data-bs-toggle="tooltip" title="Ekspor PDF/Cetak">Cetak PDF</button>
                         </div>
                     </div>
 
                     <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
-                        <div class="input-group input-group-sm search-box shadow-sm">
-                            <span class="input-group-text bg-transparent border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Cari teks...">
-                            <button class="btn btn-outline-secondary" type="button" id="btnClearSearch"><i class="fa-solid fa-xmark"></i></button>
+                        <div class="input-group input-group-sm flat-search">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                            <input type="text" id="searchInput" class="form-control border-0 shadow-none bg-transparent" placeholder="Cari teks...">
+                            <button class="btn btn-transparent border-0 text-muted" type="button" id="btnClearSearch"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                        <div class="btn-group btn-group-sm shadow-sm d-none d-xl-flex">
-                            <button type="button" id="btnZoomOut" class="btn btn-outline-secondary"><i class="fa-solid fa-minus"></i></button>
-                            <span id="zoomLabel" class="btn btn-outline-secondary disabled fw-bold text-dark" style="min-width: 55px; background-color: var(--bg-toolbar);">100%</span>
-                            <button type="button" id="btnZoomIn" class="btn btn-outline-secondary"><i class="fa-solid fa-plus"></i></button>
+                        <div class="btn-group btn-group-sm flat-group d-none d-xl-flex">
+                            <button type="button" id="btnZoomOut" class="btn btn-outline-minimal"><i class="fa-solid fa-minus"></i></button>
+                            <span id="zoomLabel" class="btn btn-outline-minimal disabled text-dark" style="min-width: 55px;">100%</span>
+                            <button type="button" id="btnZoomIn" class="btn btn-outline-minimal"><i class="fa-solid fa-plus"></i></button>
                         </div>
-                        <button type="button" id="btnThemeToggle" class="btn btn-sm btn-outline-secondary shadow-sm">
+                        <button type="button" id="btnThemeToggle" class="btn btn-sm btn-outline-minimal">
                             <i class="fa-solid fa-moon" id="themeIcon"></i>
                         </button>
                     </div>
@@ -74,42 +73,34 @@
             </div>
         </nav>
         <div id="saveStatusIndicator" class="save-status-bar text-muted no-print">
-            <span id="saveStatusText"><i class="fa-solid fa-check-circle text-success me-1"></i> Status siap</span>
+            <span id="saveStatusText"><i class="fa-solid fa-circle-check text-success me-1"></i> Sistem siap</span>
         </div>
     </header>
 
-    <!-- Ruang Kerja Dokumen -->
     <main class="workspace-container">
-        <div class="document-page shadow" id="documentPage" role="region">
+        <div class="document-page" id="documentPage" role="region">
             
-            <header class="header-container editable-block transition-all">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div class="header-badge" contenteditable="true" data-key="headerBadge">Panduan Resmi • KLH / BPLH (Desember 2025)</div>
+            <header class="header-minimal editable-block transition-all">
+                <div class="mb-3">
+                    <span class="badge-minimal" contenteditable="true" data-key="headerBadge">Panduan Resmi • KLH / BPLH</span>
                 </div>
-                <h1 contenteditable="true" data-key="docTitle" id="docTitle">Cheat Sheet: Metode Valuasi Ekonomi Jasa Ekosistem</h1>
-                <div class="header-desc" contenteditable="true" data-key="docDescription">
-                    Ringkasan cepat seluruh metode valuasi ekonomi jasa ekosistem pada Panduan Integrasi Valuasi Ekonomi...
+                <h1 class="title-minimal" contenteditable="true" data-key="docTitle" id="docTitle">Cheat Sheet: Metode Valuasi Ekonomi Jasa Ekosistem</h1>
+                <div class="desc-minimal" contenteditable="true" data-key="docDescription">
+                    Ringkasan cepat seluruh metode valuasi ekonomi jasa ekosistem...
                 </div>
             </header>
 
-            <section class="document-section mt-4" id="sectionMatrix">
-                <div class="section-header d-flex justify-content-between align-items-center">
-                    <h2><span class="icon me-2">📊</span> <span contenteditable="true" data-key="section1Title">Tabel 1. Matriks Ringkasan Metode Valuasi</span></h2>
-                    <!-- Grup Kontrol Tambah/Hapus Kolom & Baris -->
-                    <div class="table-controls no-print btn-group btn-group-sm shadow-sm">
-                        <button type="button" class="btn btn-outline-primary btn-add-col" data-table="tblMatrix" data-bs-toggle="tooltip" title="Tambah Kolom Baru">
-                            <i class="fa-solid fa-plus"></i> Kolom
-                        </button>
-                        <button type="button" class="btn btn-outline-danger btn-del-col" data-table="tblMatrix" data-bs-toggle="tooltip" title="Hapus Kolom Terakhir">
-                            <i class="fa-solid fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-primary btn-add-row" data-table="tblMatrix" data-bs-toggle="tooltip" title="Tambah Baris Baru">
-                            <i class="fa-solid fa-plus"></i> Baris
-                        </button>
+            <section class="document-section" id="sectionMatrix">
+                <div class="section-header-minimal d-flex justify-content-between align-items-end">
+                    <h2 class="subtitle-minimal"><span contenteditable="true" data-key="section1Title">Tabel 1. Matriks Ringkasan Metode Valuasi</span></h2>
+                    <div class="table-controls no-print btn-group btn-group-sm flat-group">
+                        <button type="button" class="btn btn-outline-minimal btn-add-col" data-table="tblMatrix" data-bs-toggle="tooltip" title="Tambah Kolom"><i class="fa-solid fa-plus"></i> Kolom</button>
+                        <button type="button" class="btn btn-outline-minimal text-danger btn-del-col" data-table="tblMatrix" data-bs-toggle="tooltip" title="Hapus Kolom"><i class="fa-solid fa-minus"></i></button>
+                        <button type="button" class="btn btn-outline-minimal btn-add-row" data-table="tblMatrix" data-bs-toggle="tooltip" title="Tambah Baris"><i class="fa-solid fa-plus"></i> Baris</button>
                     </div>
                 </div>
                 <div class="table-responsive smooth-scroll">
-                    <table class="tbl-matrix align-middle" id="tblMatrix" role="grid">
+                    <table class="table-minimal align-middle" id="tblMatrix" role="grid">
                         <thead role="rowgroup">
                             <tr id="tblMatrixHeadRow" role="row">
                                 <th contenteditable="true" data-field="metode">Metode</th>
@@ -128,24 +119,17 @@
                 </div>
             </section>
 
-            <section class="document-section mt-4" id="sectionCompare">
-                <div class="section-header d-flex justify-content-between align-items-center">
-                    <h2><span class="icon me-2">⚖️</span> <span contenteditable="true" data-key="section2Title">Tabel 2. Perbandingan Cepat Antar Metode</span></h2>
-                    <!-- Grup Kontrol Tambah/Hapus Kolom & Baris -->
-                    <div class="table-controls no-print btn-group btn-group-sm shadow-sm">
-                        <button type="button" class="btn btn-outline-primary btn-add-col" data-table="tblCompare" data-bs-toggle="tooltip" title="Tambah Kolom Baru">
-                            <i class="fa-solid fa-plus"></i> Kolom
-                        </button>
-                        <button type="button" class="btn btn-outline-danger btn-del-col" data-table="tblCompare" data-bs-toggle="tooltip" title="Hapus Kolom Terakhir">
-                            <i class="fa-solid fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-outline-primary btn-add-row" data-table="tblCompare" data-bs-toggle="tooltip" title="Tambah Baris Baru">
-                            <i class="fa-solid fa-plus"></i> Baris
-                        </button>
+            <section class="document-section" id="sectionCompare">
+                <div class="section-header-minimal d-flex justify-content-between align-items-end">
+                    <h2 class="subtitle-minimal"><span contenteditable="true" data-key="section2Title">Tabel 2. Perbandingan Cepat Antar Metode</span></h2>
+                    <div class="table-controls no-print btn-group btn-group-sm flat-group">
+                        <button type="button" class="btn btn-outline-minimal btn-add-col" data-table="tblCompare" data-bs-toggle="tooltip" title="Tambah Kolom"><i class="fa-solid fa-plus"></i> Kolom</button>
+                        <button type="button" class="btn btn-outline-minimal text-danger btn-del-col" data-table="tblCompare" data-bs-toggle="tooltip" title="Hapus Kolom"><i class="fa-solid fa-minus"></i></button>
+                        <button type="button" class="btn btn-outline-minimal btn-add-row" data-table="tblCompare" data-bs-toggle="tooltip" title="Tambah Baris"><i class="fa-solid fa-plus"></i> Baris</button>
                     </div>
                 </div>
                 <div class="table-responsive smooth-scroll">
-                    <table class="tbl-compare align-middle" id="tblCompare" role="grid">
+                    <table class="table-minimal align-middle" id="tblCompare" role="grid">
                         <thead role="rowgroup">
                             <tr id="tblCompareHeadRow" role="row">
                                 <th contenteditable="true" data-field="metode">Metode</th>
@@ -162,15 +146,15 @@
                 </div>
             </section>
 
-            <section class="document-section mt-4" id="sectionNotes">
-                <div class="notes-card shadow-sm transition-all">
-                    <h2 class="d-flex align-items-center fs-6 mb-2">
-                        <span class="icon me-2">📌</span> <span contenteditable="true" data-key="notesTitle">Catatan Penting Methodologis</span>
+            <section class="document-section" id="sectionNotes">
+                <div class="notes-minimal transition-all">
+                    <h2 class="subtitle-minimal mb-3">
+                        <span contenteditable="true" data-key="notesTitle">Catatan Penting Methodologis</span>
                     </h2>
-                    <ul id="notesList" class="editable-list"></ul>
+                    <ul id="notesList" class="editable-list list-minimal"></ul>
                     <div class="no-print mt-3">
-                        <button type="button" id="btnAddNote" class="btn btn-sm btn-outline-secondary rounded-pill fw-medium">
-                            <i class="fa-solid fa-plus me-1"></i> Tambah Catatan
+                        <button type="button" id="btnAddNote" class="btn btn-sm btn-outline-minimal text-muted">
+                            + Tambah Catatan
                         </button>
                     </div>
                 </div>
@@ -183,12 +167,11 @@
         </div>
     </main>
 
-    <!-- Notifikasi Toast -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3 no-print" style="z-index: 1090;">
-        <div id="appToast" class="toast align-items-center border-0 shadow-lg bg-dark text-white" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- Notifikasi Minimalis -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-4 no-print" style="z-index: 1090;">
+        <div id="appToast" class="toast align-items-center border-0 flat-toast text-white" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
-                <div class="toast-body fw-medium" id="toastMessage">Sistem siap.</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                <div class="toast-body" id="toastMessage">Sistem siap.</div>
             </div>
         </div>
     </div>
