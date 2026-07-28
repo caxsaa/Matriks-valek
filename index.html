@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editor Dokumen - Cheat Sheet: Metode Valuasi Ekonomi</title>
-    <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
@@ -33,14 +29,18 @@
                 <div class="collapse navbar-collapse" id="toolbarCollapse">
                     <div class="d-flex flex-wrap align-items-center gap-2 my-2 my-lg-0 me-auto">
                         <div class="btn-group btn-group-sm flat-group">
-                            <button type="button" id="btnUndo" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Urungkan (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
-                            <button type="button" id="btnRedo" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Ulangi (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
+                            <button type="button" id="btnUndo" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Urungkan Teks (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
+                            <button type="button" id="btnRedo" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Ulangi Teks (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
                         </div>
                         <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
                         <div class="btn-group btn-group-sm flat-group">
-                            <button type="button" id="btnSave" class="btn btn-minimal-primary" data-bs-toggle="tooltip" title="Simpan Data">Simpan</button>
-                            <button type="button" id="btnLoad" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Muat Data">Muat</button>
-                            <button type="button" id="btnReset" class="btn btn-outline-minimal text-danger" data-bs-toggle="tooltip" title="Reset Awal">Reset</button>
+                            <button type="button" id="btnSave" class="btn btn-minimal-primary" data-bs-toggle="tooltip" title="Simpan Teks">Simpan</button>
+                            <button type="button" id="btnLoad" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Muat Teks">Muat</button>
+                            <button type="button" id="btnReset" class="btn btn-outline-minimal text-danger" data-bs-toggle="tooltip" title="Reset Teks Awal">Reset</button>
+                        </div>
+                        <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
+                        <div class="btn-group btn-group-sm flat-group">
+                            <button type="button" id="btnSyncApi" class="btn btn-outline-minimal text-success" data-bs-toggle="tooltip" title="Tarik data terbaru dari Spreadsheet"><i class="fa-solid fa-cloud-arrow-down me-1"></i> Sync Tabel</button>
                         </div>
                         <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
                         <div class="btn-group btn-group-sm flat-group">
@@ -80,6 +80,7 @@
     <main class="workspace-container">
         <div class="document-page" id="documentPage" role="region">
             
+            <!-- KATEGORI A: Dapat Diedit (Tersimpan Lokal) -->
             <header class="header-minimal editable-block transition-all">
                 <div class="mb-3">
                     <span class="badge-minimal" contenteditable="true" data-key="headerBadge">Panduan Resmi • KLH / BPLH</span>
@@ -90,62 +91,59 @@
                 </div>
             </header>
 
+            <!-- KATEGORI B: Read-Only (Tersinkronisasi API) -->
             <section class="document-section" id="sectionMatrix">
                 <div class="section-header-minimal d-flex justify-content-between align-items-end">
                     <h2 class="subtitle-minimal"><span contenteditable="true" data-key="section1Title">Tabel 1. Matriks Ringkasan Metode Valuasi</span></h2>
-                    <div class="table-controls no-print btn-group btn-group-sm flat-group">
-                        <button type="button" class="btn btn-outline-minimal btn-add-col" data-table="tblMatrix" data-bs-toggle="tooltip" title="Tambah Kolom"><i class="fa-solid fa-plus"></i> Kolom</button>
-                        <button type="button" class="btn btn-outline-minimal text-danger btn-del-col" data-table="tblMatrix" data-bs-toggle="tooltip" title="Hapus Kolom"><i class="fa-solid fa-minus"></i></button>
-                        <button type="button" class="btn btn-outline-minimal btn-add-row" data-table="tblMatrix" data-bs-toggle="tooltip" title="Tambah Baris"><i class="fa-solid fa-plus"></i> Baris</button>
-                    </div>
                 </div>
                 <div class="table-responsive smooth-scroll">
+                    <div id="loadingMatrix" class="text-center py-4 text-muted d-none"><i class="fa-solid fa-spinner fa-spin me-2"></i> Mengambil data dari Spreadsheet...</div>
                     <table class="table-minimal align-middle" id="tblMatrix" role="grid">
                         <thead role="rowgroup">
-                            <tr id="tblMatrixHeadRow" role="row">
-                                <th contenteditable="true" data-field="metode">Metode</th>
-                                <th contenteditable="true" data-field="jenisJasa">Jenis Jasa Ekosistem</th>
-                                <th contenteditable="true" data-field="digunakanKetika">Digunakan Ketika</th>
-                                <th contenteditable="true" data-field="prinsipRumus">Prinsip / Rumus</th>
-                                <th contenteditable="true" data-field="dataDibutuhkan">Data Dibutuhkan</th>
-                                <th contenteditable="true" data-field="contohPenerapan">Contoh Penerapan</th>
-                                <th contenteditable="true" data-field="kelebihan">Kelebihan</th>
-                                <th contenteditable="true" data-field="keterbatasan">Keterbatasan</th>
-                                <th class="no-print col-action-head" data-field="action">Aksi</th>
+                            <tr role="row">
+                                <th role="columnheader">Metode</th>
+                                <th role="columnheader">Jenis Jasa Ekosistem</th>
+                                <th role="columnheader">Digunakan Ketika</th>
+                                <th role="columnheader">Prinsip / Rumus</th>
+                                <th role="columnheader">Data Dibutuhkan</th>
+                                <th role="columnheader">Contoh Penerapan</th>
+                                <th role="columnheader">Kelebihan</th>
+                                <th role="columnheader">Keterbatasan</th>
                             </tr>
                         </thead>
-                        <tbody id="tblMatrixBody" role="rowgroup"></tbody>
+                        <tbody id="tblMatrixBody" role="rowgroup">
+                            <!-- Baris di-inject oleh API -->
+                        </tbody>
                     </table>
                 </div>
             </section>
 
+            <!-- KATEGORI B: Read-Only (Tersinkronisasi API) -->
             <section class="document-section" id="sectionCompare">
                 <div class="section-header-minimal d-flex justify-content-between align-items-end">
                     <h2 class="subtitle-minimal"><span contenteditable="true" data-key="section2Title">Tabel 2. Perbandingan Cepat Antar Metode</span></h2>
-                    <div class="table-controls no-print btn-group btn-group-sm flat-group">
-                        <button type="button" class="btn btn-outline-minimal btn-add-col" data-table="tblCompare" data-bs-toggle="tooltip" title="Tambah Kolom"><i class="fa-solid fa-plus"></i> Kolom</button>
-                        <button type="button" class="btn btn-outline-minimal text-danger btn-del-col" data-table="tblCompare" data-bs-toggle="tooltip" title="Hapus Kolom"><i class="fa-solid fa-minus"></i></button>
-                        <button type="button" class="btn btn-outline-minimal btn-add-row" data-table="tblCompare" data-bs-toggle="tooltip" title="Tambah Baris"><i class="fa-solid fa-plus"></i> Baris</button>
-                    </div>
                 </div>
                 <div class="table-responsive smooth-scroll">
+                    <div id="loadingCompare" class="text-center py-4 text-muted d-none"><i class="fa-solid fa-spinner fa-spin me-2"></i> Mengambil data dari Spreadsheet...</div>
                     <table class="table-minimal align-middle" id="tblCompare" role="grid">
                         <thead role="rowgroup">
-                            <tr id="tblCompareHeadRow" role="row">
-                                <th contenteditable="true" data-field="metode">Metode</th>
-                                <th contenteditable="true" data-field="hargaPasar">Ada Harga Pasar?</th>
-                                <th contenteditable="true" data-field="pendapatan">Berbasis Pendapatan</th>
-                                <th contenteditable="true" data-field="biaya">Berbasis Biaya</th>
-                                <th contenteditable="true" data-field="kesulitan">Tingkat Kesulitan</th>
-                                <th contenteditable="true" data-field="kebutuhanData">Kebutuhan Data</th>
-                                <th class="no-print col-action-head" data-field="action">Aksi</th>
+                            <tr role="row">
+                                <th role="columnheader">Metode</th>
+                                <th role="columnheader" class="text-center">Ada Harga Pasar?</th>
+                                <th role="columnheader" class="text-center">Berbasis Pendapatan</th>
+                                <th role="columnheader" class="text-center">Berbasis Biaya</th>
+                                <th role="columnheader">Tingkat Kesulitan</th>
+                                <th role="columnheader">Kebutuhan Data</th>
                             </tr>
                         </thead>
-                        <tbody id="tblCompareBody" role="rowgroup"></tbody>
+                        <tbody id="tblCompareBody" role="rowgroup">
+                            <!-- Baris di-inject oleh API -->
+                        </tbody>
                     </table>
                 </div>
             </section>
 
+            <!-- KATEGORI A: Dapat Diedit (Tersimpan Lokal) -->
             <section class="document-section" id="sectionNotes">
                 <div class="notes-minimal transition-all">
                     <h2 class="subtitle-minimal mb-3">
@@ -161,11 +159,39 @@
             </section>
 
             <footer class="document-footer print-only-footer d-none d-print-flex">
-                <div class="footer-left">Kementerian Lingkungan Hidup / BPLH</div>
-                <div class="footer-right">Cheat Sheet Valuasi Ekonomi Jasa Ekosistem</div>
+                <div class="footer-left" contenteditable="true" data-key="footerLeft">Kementerian Lingkungan Hidup / BPLH</div>
+                <div class="footer-right" contenteditable="true" data-key="footerRight">Cheat Sheet Valuasi Ekonomi Jasa Ekosistem</div>
             </footer>
         </div>
     </main>
+
+    <!-- TEMPLATE HTML UNTUK TABEL (Mempertahankan Struktur & CSS Tanpa contenteditable) -->
+    <template id="tplMatrixRow">
+        <tr role="row">
+            <td data-field="metode" role="gridcell"></td>
+            <td data-field="jenisJasa" role="gridcell"></td>
+            <td data-field="digunakanKetika" role="gridcell"></td>
+            <td data-field="prinsipRumus" role="gridcell">
+                <div class="math-code" data-subfield="formula"></div>
+                <div class="math-desc" data-subfield="formulaDesc"></div>
+            </td>
+            <td data-field="dataDibutuhkan" role="gridcell"></td>
+            <td data-field="contohPenerapan" role="gridcell"></td>
+            <td data-field="kelebihan" role="gridcell"></td>
+            <td data-field="keterbatasan" role="gridcell"></td>
+        </tr>
+    </template>
+
+    <template id="tplCompareRow">
+        <tr role="row">
+            <td data-field="metode" role="gridcell"></td>
+            <td data-field="hargaPasar" role="gridcell" class="text-center"></td>
+            <td data-field="pendapatan" role="gridcell" class="text-center"></td>
+            <td data-field="biaya" role="gridcell" class="text-center"></td>
+            <td data-field="kesulitan" role="gridcell"></td>
+            <td data-field="kebutuhanData" role="gridcell"></td>
+        </tr>
+    </template>
 
     <!-- Notifikasi Minimalis -->
     <div class="toast-container position-fixed bottom-0 end-0 p-4 no-print" style="z-index: 1090;">
