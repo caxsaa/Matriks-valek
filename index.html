@@ -34,23 +34,23 @@
                         </div>
                         <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
                         <div class="btn-group btn-group-sm flat-group">
-                            <button type="button" id="btnSave" class="btn btn-minimal-primary" data-bs-toggle="tooltip" title="Simpan Teks">Simpan</button>
-                            <button type="button" id="btnLoad" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Muat Teks">Muat</button>
+                            <button type="button" id="btnSave" class="btn btn-minimal-primary" data-bs-toggle="tooltip" title="Simpan ke Cloud">Simpan</button>
+                            <button type="button" id="btnLoad" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Muat dari Cloud">Muat</button>
                             <button type="button" id="btnReset" class="btn btn-outline-minimal text-danger" data-bs-toggle="tooltip" title="Reset Teks Awal">Reset</button>
                         </div>
                         <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
                         <div class="btn-group btn-group-sm flat-group">
-                            <button type="button" id="btnSyncApi" class="btn btn-outline-minimal text-success" data-bs-toggle="tooltip" title="Tarik data terbaru dari Spreadsheet"><i class="fa-solid fa-cloud-arrow-down me-1"></i> Sync Tabel</button>
+                            <button type="button" id="btnSyncApi" class="btn btn-outline-minimal text-success" data-bs-toggle="tooltip" title="Tarik data terbaru"><i class="fa-solid fa-cloud-arrow-down me-1"></i> Sync Tabel</button>
                         </div>
                         <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
                         <div class="btn-group btn-group-sm flat-group">
-                            <button type="button" id="btnExportJson" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Ekspor JSON">JSON</button>
+                            <button type="button" id="btnExportJson" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Ekspor Cadangan JSON">JSON</button>
                             <button type="button" id="btnImportJson" class="btn btn-outline-minimal" data-bs-toggle="tooltip" title="Impor JSON">Impor</button>
                             <input type="file" id="fileInputJson" accept="application/json" class="d-none">
                         </div>
                         <div class="vr mx-2 d-none d-sm-block bg-separator"></div>
                         <div class="btn-group btn-group-sm flat-group">
-                            <button type="button" id="btnExportPdf" class="btn btn-minimal-dark" data-bs-toggle="tooltip" title="Ekspor PDF/Cetak">Cetak PDF</button>
+                            <button type="button" id="btnExportPdf" class="btn btn-minimal-dark" data-bs-toggle="tooltip" title="Cetak PDF">Cetak PDF</button>
                         </div>
                     </div>
 
@@ -73,31 +73,31 @@
             </div>
         </nav>
         <div id="saveStatusIndicator" class="save-status-bar text-muted no-print">
-            <span id="saveStatusText"><i class="fa-solid fa-circle-check text-success me-1"></i> Sistem siap</span>
+            <span id="saveStatusText"><i class="fa-solid fa-cloud text-success me-1"></i> Terhubung ke Cloud</span>
         </div>
     </header>
 
     <main class="workspace-container">
         <div class="document-page" id="documentPage" role="region">
             
-            <!-- KATEGORI A: Dapat Diedit (Tersimpan Lokal) -->
+            <!-- HEADER DOKUMEN -->
             <header class="header-minimal editable-block transition-all">
                 <div class="mb-3">
                     <span class="badge-minimal" contenteditable="true" data-key="headerBadge">Panduan Resmi • KLH / BPLH</span>
                 </div>
                 <h1 class="title-minimal" contenteditable="true" data-key="docTitle" id="docTitle">Cheat Sheet: Metode Valuasi Ekonomi Jasa Ekosistem</h1>
                 <div class="desc-minimal" contenteditable="true" data-key="docDescription">
-                    Ringkasan cepat seluruh metode valuasi ekonomi jasa ekosistem...
+                    Ringkasan cepat seluruh metode valuasi ekonomi jasa ekosistem pada Panduan Integrasi Valuasi Ekonomi Lingkungan Hidup dalam Persetujuan Lingkungan (KLH/BPLH, Desember 2025), Bab 5-6.
                 </div>
             </header>
 
-            <!-- KATEGORI B: Read-Only (Tersinkronisasi API) -->
+            <!-- TABEL 1 -->
             <section class="document-section" id="sectionMatrix">
-                <div class="section-header-minimal d-flex justify-content-between align-items-end">
-                    <h2 class="subtitle-minimal"><span contenteditable="true" data-key="section1Title">Tabel 1. Matriks Ringkasan Metode Valuasi</span></h2>
+                <div class="section-header-minimal d-flex justify-content-between align-items-end mb-2">
+                    <h2 class="subtitle-minimal mb-0"><span contenteditable="true" data-key="section1Title">Tabel 1. Matriks Ringkasan Metode Valuasi</span></h2>
                 </div>
-                <div class="table-responsive smooth-scroll">
-                    <div id="loadingMatrix" class="text-center py-4 text-muted d-none"><i class="fa-solid fa-spinner fa-spin me-2"></i> Mengambil data dari Spreadsheet...</div>
+                <div class="table-responsive">
+                    <div id="loadingMatrix" class="text-center py-4 text-muted d-none"><i class="fa-solid fa-spinner fa-spin me-2"></i> Sinkronisasi Cloud...</div>
                     <table class="table-minimal align-middle" id="tblMatrix" role="grid">
                         <thead role="rowgroup">
                             <tr role="row">
@@ -111,20 +111,18 @@
                                 <th role="columnheader">Keterbatasan</th>
                             </tr>
                         </thead>
-                        <tbody id="tblMatrixBody" role="rowgroup">
-                            <!-- Baris di-inject oleh API -->
-                        </tbody>
+                        <tbody id="tblMatrixBody" role="rowgroup"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- KATEGORI B: Read-Only (Tersinkronisasi API) -->
+            <!-- TABEL 2 -->
             <section class="document-section" id="sectionCompare">
-                <div class="section-header-minimal d-flex justify-content-between align-items-end">
-                    <h2 class="subtitle-minimal"><span contenteditable="true" data-key="section2Title">Tabel 2. Perbandingan Cepat Antar Metode</span></h2>
+                <div class="section-header-minimal d-flex justify-content-between align-items-end mb-2">
+                    <h2 class="subtitle-minimal mb-0"><span contenteditable="true" data-key="section2Title">Tabel 2. Perbandingan Cepat Antar Metode</span></h2>
                 </div>
-                <div class="table-responsive smooth-scroll">
-                    <div id="loadingCompare" class="text-center py-4 text-muted d-none"><i class="fa-solid fa-spinner fa-spin me-2"></i> Mengambil data dari Spreadsheet...</div>
+                <div class="table-responsive">
+                    <div id="loadingCompare" class="text-center py-4 text-muted d-none"><i class="fa-solid fa-spinner fa-spin me-2"></i> Sinkronisasi Cloud...</div>
                     <table class="table-minimal align-middle" id="tblCompare" role="grid">
                         <thead role="rowgroup">
                             <tr role="row">
@@ -136,14 +134,12 @@
                                 <th role="columnheader">Kebutuhan Data</th>
                             </tr>
                         </thead>
-                        <tbody id="tblCompareBody" role="rowgroup">
-                            <!-- Baris di-inject oleh API -->
-                        </tbody>
+                        <tbody id="tblCompareBody" role="rowgroup"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- KATEGORI A: Dapat Diedit (Tersimpan Lokal) -->
+            <!-- CATATAN -->
             <section class="document-section" id="sectionNotes">
                 <div class="notes-minimal transition-all">
                     <h2 class="subtitle-minimal mb-3">
@@ -165,7 +161,7 @@
         </div>
     </main>
 
-    <!-- TEMPLATE HTML UNTUK TABEL (Mempertahankan Struktur & CSS Tanpa contenteditable) -->
+    <!-- TEMPLATE TABEL -->
     <template id="tplMatrixRow">
         <tr role="row">
             <td data-field="metode" role="gridcell"></td>
@@ -193,7 +189,7 @@
         </tr>
     </template>
 
-    <!-- Notifikasi Minimalis -->
+    <!-- TOAST -->
     <div class="toast-container position-fixed bottom-0 end-0 p-4 no-print" style="z-index: 1090;">
         <div id="appToast" class="toast align-items-center border-0 flat-toast text-white" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">

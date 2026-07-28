@@ -1,342 +1,223 @@
 /* ==========================================================================
-   EcoVal Document Editor - MINIMALIST AESTHETIC (FIXED VERSION)
-   Focus: Typography, Whitespace, Monochromatic Accents, Flat UI
+   EcoVal Document Editor - Clean Academic & Minimalist Style
    ========================================================================== */
 
 :root {
-    /* Minimalist Light Theme */
-    --bg-body: #f9fafb;
-    --bg-doc: #ffffff;
-    --bg-toolbar: rgba(255, 255, 255, 0.98);
-    --bg-table-hover: #f9fafb;
-    --bg-math: #f3f4f6;
-    --bg-search: #f3f4f6;
-    
-    --text-main: #111827;
-    --text-muted: #6b7280;
-    --text-inverse: #ffffff;
-    
-    --border-light: #e5e7eb;
-    --border-dark: #111827;
-    --border-focus: rgba(17, 24, 39, 0.15);
-
-    --accent-color: #111827;
-    --highlight-bg: #fef08a;
-    --highlight-text: #111827;
-    
-    --color-success: #059669;
-    --color-danger: #dc2626;
-
-    /* Typography */
-    --font-sans: 'Inter', -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-
-    /* Document Setup */
-    --doc-width: 297mm;
+    --bg-body: #f8f9fa;
+    --bg-page: #ffffff;
+    --text-main: #212529;
+    --text-muted: #6c757d;
+    --border-light: #dee2e6;
+    --border-dark: #343a40;
+    --bg-math: #f1f3f5;
+    --bg-table-hover: #f8f9fa;
+    --primary-color: #0f172a;
 }
 
-/* Dark Theme - True Dark Minimalist */
 [data-theme="dark"] {
-    --bg-body: #09090b;
-    --bg-doc: #18181b;
-    --bg-toolbar: rgba(24, 24, 27, 0.98);
-    --bg-table-hover: #27272a;
-    --bg-math: #27272a;
-    --bg-search: #27272a;
-    
-    --text-main: #f4f4f5;
-    --text-muted: #a1a1aa;
-    
-    --border-light: #27272a;
-    --border-dark: #f4f4f5;
-    --border-focus: rgba(244, 244, 245, 0.15);
-
-    --accent-color: #f4f4f5;
-    --highlight-bg: #ca8a04;
-    --highlight-text: #ffffff;
+    --bg-body: #121212;
+    --bg-page: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-light: #2c2c2c;
+    --border-dark: #555555;
+    --bg-math: #2b2b2b;
+    --bg-table-hover: #252525;
+    --primary-color: #f8f9fa;
 }
-
-/* ==========================================================================
-   Global Reset & Scrollbars
-   ========================================================================== */
-*, *::before, *::after { box-sizing: border-box; }
 
 body {
-    font-family: var(--font-sans);
-    font-size: 8.5pt;
-    line-height: 1.6;
-    color: var(--text-main);
     background-color: var(--bg-body);
-    margin: 0; padding: 0;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-/* Minimal Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-
-/* ==========================================================================
-   Toolbar Flat UI
-   ========================================================================== */
-.editor-toolbar-wrapper {
-    position: sticky; top: 0; z-index: 1080;
-    background-color: var(--bg-toolbar);
-    border-bottom: 1px solid var(--border-light);
-    backdrop-filter: blur(8px);
-}
-.editor-toolbar { padding: 8px 0; }
-
-.bg-separator { width: 1px; background-color: var(--border-light); }
-
-/* Flat Buttons */
-.flat-group { gap: 4px; }
-.btn-outline-minimal {
-    border: 1px solid var(--border-light);
     color: var(--text-main);
-    background: transparent;
-    font-weight: 500;
-    border-radius: 4px;
-    padding: 4px 10px;
-    transition: all 0.2s;
-}
-.btn-outline-minimal:hover {
-    background: var(--bg-table-hover);
-    border-color: var(--text-muted);
-}
-.btn-minimal-primary {
-    border: 1px solid var(--accent-color);
-    background: transparent;
-    color: var(--accent-color);
-    font-weight: 600;
-    border-radius: 4px;
-    padding: 4px 12px;
-}
-.btn-minimal-primary:hover {
-    background: var(--accent-color);
-    color: var(--bg-doc);
-}
-.btn-minimal-dark {
-    background: var(--accent-color);
-    color: var(--bg-doc);
-    border: 1px solid var(--accent-color);
-    font-weight: 600;
-    border-radius: 4px;
-    padding: 4px 12px;
-}
-.btn-minimal-dark:hover {
-    opacity: 0.9;
-    color: var(--bg-doc);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
 }
 
-.flat-search {
-    background: var(--bg-search);
-    border-radius: 4px;
-    border: 1px solid transparent;
+/* Toolbar Styling */
+.editor-toolbar-wrapper {
+    background-color: var(--bg-page);
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
 }
-.flat-search:focus-within { border-color: var(--border-light); }
-.flat-search input { color: var(--text-main); }
 
 .save-status-bar {
-    font-size: 7.5pt;
-    text-align: center;
-    padding: 4px;
-    border-top: 1px solid var(--border-light);
-    background: var(--bg-doc);
+    font-size: 0.75rem;
+    padding: 2px 1.5rem;
+    background-color: var(--bg-body);
+    border-bottom: 1px solid var(--border-light);
 }
 
-/* ==========================================================================
-   Document Typography & Layout
-   ========================================================================== */
+/* Workspace & Kertas A4 */
 .workspace-container {
-    display: flex; justify-content: center;
-    padding: 32px 16px; overflow-x: auto;
+    padding: 30px 15px;
+    display: flex;
+    justify-content: center;
 }
 
 .document-page {
-    width: var(--doc-width);
-    min-height: var(--document-min-height);
-    background-color: var(--bg-doc);
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    width: 210mm;
+    min-height: 297mm;
     padding: 20mm 20mm;
-    border: 1px solid var(--border-light);
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    position: relative;
     border-radius: 4px;
-    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.03);
 }
-[data-theme="dark"] .document-page { box-shadow: none; }
 
-/* Minimal Header */
+/* Header Dokumen */
 .header-minimal {
-    margin-bottom: 32px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--border-dark);
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-dark);
+    padding-bottom: 1rem;
 }
+
 .badge-minimal {
-    font-size: 7.5pt;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--text-muted);
-    outline: none;
-}
-.title-minimal {
-    font-size: 20pt;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: var(--text-main);
-    margin: 8px 0;
-    line-height: 1.2;
-    outline: none;
-}
-.desc-minimal {
-    font-size: 9pt;
-    color: var(--text-muted);
-    line-height: 1.6;
-    outline: none;
 }
 
-/* Section Header */
-.document-section { margin-top: 40px; }
-.section-header-minimal {
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-}
-.subtitle-minimal {
-    font-size: 11pt;
-    font-weight: 600;
+.title-minimal {
+    font-size: 1.5rem;
+    font-weight: 700;
     color: var(--text-main);
-    margin: 0;
-    outline: none;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.desc-minimal {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* Bagian & Subtitle */
+.document-section {
+    margin-bottom: 2.5rem;
+}
+
+.subtitle-minimal {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.75rem;
+    border-left: 3px solid var(--border-dark);
+    padding-left: 10px;
 }
 
 /* ==========================================================================
-   Clean Minimalist Tables (FIXED)
+   Tabel Estetik & Proporsional (TIDAK LAGI JELEK/TERPOTONG)
    ========================================================================== */
 .table-responsive {
     width: 100%;
-    overflow-x: auto; /* Ini yang tadinya hilang, sekarang bisa digeser! */
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 8px; /* Ruang untuk scrollbar */
+    overflow-x: auto; /* Memungkinkan geser halus jika layar terlalu kecil */
+    margin-bottom: 1rem;
 }
 
 .table-minimal {
     width: 100%;
-    min-width: 1100px; /* Paksa tabel tetap lebar, tidak tergencet */
     border-collapse: collapse;
-    font-size: 8pt;
+    font-size: 8pt; /* Ukuran pas, tidak terlalu kecil dan tidak besar */
+    background-color: transparent;
 }
 
 .table-minimal th {
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     font-size: 7.5pt;
-    color: var(--text-muted);
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border-dark);
+    color: var(--text-main);
+    background-color: var(--bg-math);
+    padding: 10px 8px;
+    border-top: 1.5px solid var(--border-dark);
+    border-bottom: 1.5px solid var(--border-dark);
     text-align: left;
+    vertical-align: middle;
 }
 
 .table-minimal td {
-    padding: 14px 14px;
+    padding: 10px 8px;
     border-bottom: 1px solid var(--border-light);
     vertical-align: top;
+    line-height: 1.4;
+    word-wrap: break-word;
 }
 
-.table-minimal tbody tr {
-    transition: background-color 0.15s;
-}
 .table-minimal tbody tr:hover td {
     background-color: var(--bg-table-hover);
 }
 
-/* Actions in Table */
-.col-action-head { text-align: center; width: 50px !important; min-width: 50px !important; }
-.cell-actions {
-    display: flex; flex-direction: column; gap: 4px; align-items: center;
-    opacity: 0; transition: opacity 0.2s;
-}
-tr:hover .cell-actions { opacity: 1; }
-
-.btn-row-action {
-    background: transparent;
-    border: 1px solid var(--border-light);
-    color: var(--text-muted);
-    padding: 4px;
-    font-size: 7.5pt;
-    border-radius: 4px;
-    width: 100%;
-    transition: all 0.2s;
-}
-.btn-row-action:hover { border-color: var(--text-main); color: var(--text-main); }
-.btn-row-action.btn-outline-danger:hover { border-color: var(--color-danger); color: var(--color-danger); }
-
-/* Math & Notes */
+/* Kotak Rumus di dalam Tabel */
 .math-code {
-    font-family: var(--font-mono);
+    font-family: 'JetBrains Mono', monospace;
     background-color: var(--bg-math);
-    padding: 3px 6px;
-    border-radius: 3px;
+    padding: 4px 6px;
+    border-radius: 4px;
     font-size: 7.5pt;
-    font-weight: 500;
+    font-weight: 600;
     display: inline-block;
     margin-bottom: 4px;
+    border: 1px solid var(--border-light);
 }
-.math-desc { font-size: 7.5pt; color: var(--text-muted); }
 
-.check-item { color: var(--color-success); font-weight: 600; }
-.cross-item { color: var(--color-danger); font-weight: 600; }
+.math-desc {
+    font-size: 7.5pt;
+    color: var(--text-muted);
+    display: block;
+}
 
+/* Indikator Check / Cross */
+.check-item {
+    color: #198754;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.cross-item {
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* Catatan & Footer */
 .notes-minimal {
-    border-top: 1px dashed var(--border-light);
-    padding-top: 24px;
-    margin-top: 24px;
+    background-color: var(--bg-math);
+    padding: 1.25rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
 }
+
 .list-minimal {
-    margin: 0; padding-left: 16px;
+    padding-left: 1.2rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.document-footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
-.list-minimal li { margin-bottom: 8px; }
-.note-text { color: var(--text-main); }
 
-/* ContentEditable Focus - Subtle */
-[contenteditable="true"] { outline: none; transition: background-color 0.2s; border-radius: 2px; }
-[contenteditable="true"]:focus {
-    background-color: var(--bg-table-hover);
-    box-shadow: 0 0 0 2px var(--border-focus);
-}
-
-.search-highlight {
-    background-color: var(--highlight-bg) !important;
-    color: var(--highlight-text) !important;
-    border-radius: 2px;
-}
-
-.flat-toast {
-    background-color: var(--accent-color) !important;
-    color: var(--bg-doc) !important;
-    border-radius: 4px;
-}
-
-/* ==========================================================================
-   Print Optimization
-   ========================================================================== */
+/* Mode Cetak / PDF */
 @media print {
-    @page { size: A4 landscape; margin: 15mm; }
+    body { background: none; }
+    .workspace-container { padding: 0; }
+    .document-page { box-shadow: none; width: 100%; padding: 10mm; }
     .no-print { display: none !important; }
-    body { background: #fff !important; color: #000 !important; }
-    .workspace-container { padding: 0 !important; }
-    .document-page { width: 100% !important; border: none !important; padding: 0 !important; box-shadow: none !important; }
-    .table-responsive { overflow: visible !important; }
-    .table-minimal { min-width: 100% !important; }
-    .table-minimal th { color: #000 !important; border-bottom: 2px solid #000 !important; }
-    .table-minimal td { border-bottom: 1px solid #ddd !important; }
-    tr { page-break-inside: avoid !important; }
-    .header-minimal { border-bottom: 2px solid #000 !important; }
-    .print-only-footer { position: fixed; bottom: 0; width: 100%; display: flex !important; justify-content: space-between; font-size: 7.5pt; color: #555; border-top: 1px solid #ddd; padding-top: 5px; }
-}
-
-@media (max-width: 992px) {
-    .document-page { width: 100%; padding: 16px; }
-    .title-minimal { font-size: 16pt; }
 }

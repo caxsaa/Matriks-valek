@@ -1,14 +1,11 @@
 {
   "headerBadge": "Panduan Resmi • KLH / BPLH",
-  "docTitle": "Cheat Sheet: Metode Valuasi Ekonomi Jasa Ekosistem",
+  "docTitle": "Matriks Ringkasan: Metode Valuasi Ekonomi Jasa Ekosistem",
   "docDescription": "Ringkasan cepat seluruh metode valuasi ekonomi jasa ekosistem pada Panduan Integrasi Valuasi Ekonomi Lingkungan Hidup dalam Persetujuan Lingkungan (KLH/BPLH, Desember 2025), Bab 5-6.",
   "section1Title": "Tabel 1. Matriks Ringkasan Metode Valuasi",
   "section2Title": "Tabel 2. Perbandingan Cepat Antar Metode",
-  "notesTitle": "Catatan Penting Methodologis",
+  "notesTitle": "Catatan Penting<br>",
   "footerLeft": "Kementerian Lingkungan Hidup / BPLH",
-  "footerRight": "Cheat Sheet Valuasi Ekonomi Jasa Ekosistem",
-  "notes": [
-    "Resource Rent dipakai dua kali dalam dokumen dengan rumus identik untuk provisioning dan cultural services.",
-    "Kolom Kelebihan dan Keterbatasan merupakan sintesis berdasarkan karakteristik."
-  ]
+  "footerRight": "Valuasi Ekonomi Jasa Ekosistem",
+  "notes": []
 }

@@ -1,15 +1,13 @@
 /**
  * EcoVal Document Editor
- * ARCHITECTURE BIFURCATION:
- * Category A: Editable Text (LocalStorage)
- * Category B: Read-Only Tables (Google Apps Script API)
+ * 100% CLOUD LIVE SYNC (Tabel Read-Only + Teks Editable)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
-    // URL API GOOGLE SPREADSHEET ANDA
-    const SPREADSHEET_API_URL = "https://script.google.com/macros/s/AKfycbykZ_CWx5qFeZ1grz8F2YaBUldJjESCmVzXRSb1hEmNKOTYquLAvvfPw0SaHhQVbcjA/exec";
+    // API Google Spreadsheet Anda (Otomatis Live)
+    const SPREADSHEET_API_URL = "https://script.google.com/macros/s/AKfycbzQN1bXgZeqHlbbcRhe3ZLein0cHbSsij2hRV0lmiZ06xO7c-7jpm5mo918KTY1dfUH/exec";
 
     let tooltips = [];
     try {
@@ -26,10 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
         historyIndex: -1,
         maxHistory: 30,
         autoSaveTimer: null,
-        autoSaveDelay: 1500,
+        autoSaveDelay: 2000, // Disimpan otomatis 2 detik setelah berhenti mengetik
         currentZoom: 100,
-        isEditing: false,
-        externalTablesLoaded: false
+        isEditing: false
     };
 
     const DOM = {
@@ -92,32 +89,61 @@ document.addEventListener('DOMContentLoaded', () => {
         let str = String(text).trim();
         if (str.toUpperCase() === 'V') return '<span class="check-item">✓</span>';
         if (str.toUpperCase() === 'X') return '<span class="cross-item">✗</span>';
-        // Konversi baris baru dari spreadsheet menjadi <br> di HTML
         return sanitizeHTML(str).replace(/\n/g, '<br>');
     }
 
     // ==========================================================================
-    // INITIALIZATION
+    // INIT & CLOUD FETCHING
     // ==========================================================================
     async function initApplication() {
         setupGlobalEventDelegation();
         setupToolbarEvents();
         loadThemePreference();
 
-        // 1. Muat Kategori A (Teks) dari LocalStorage
-        const localSavedData = localStorage.getItem('ecoval_doc_text_data');
-        if (localSavedData) {
-            try {
-                AppState.data = JSON.parse(localSavedData);
-                renderCategoryA();
-            } catch (e) { await fetchDefaultCategoryA(); }
-        } else {
-            await fetchDefaultCategoryA();
-        }
-        pushHistoryState();
+        if(DOM.saveStatusText) DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-primary me-1"></i> Menyinkronkan seluruh data Cloud...';
+        
+        await fetchGoogleSpreadsheetData();
+    }
 
-        // 2. Muat Kategori B (Tabel) dari Google Apps Script API
-        fetchGoogleSpreadsheetData();
+    async function fetchGoogleSpreadsheetData() {
+        DOM.tblMatrix.classList.add('d-none');
+        DOM.loadingMatrix.classList.remove('d-none');
+        DOM.tblCompare.classList.add('d-none');
+        DOM.loadingCompare.classList.remove('d-none');
+
+        try {
+            const response = await fetch(SPREADSHEET_API_URL);
+            const apiData = await response.json();
+
+            if (apiData.status === "success") {
+                // 1. Render Tabel
+                renderReadonlyTables(apiData.matrixTable, apiData.compareTable);
+                
+                // 2. Render Teks dari Cloud
+                if (apiData.textData && Object.keys(apiData.textData).length > 0) {
+                    AppState.data = apiData.textData;
+                    AppState.isEditing = false;
+                    renderCategoryA();
+                    pushHistoryState();
+                } else {
+                    // Jika tab Teks kosong, muat data bawaan lalu suntik ke Cloud
+                    await fetchDefaultCategoryA();
+                    saveToCloud(false);
+                }
+                
+                showToast('Terhubung ke Cloud Database', 'success');
+                if(DOM.saveStatusText) DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-cloud text-success me-1"></i> Tersinkronisasi';
+            }
+        } catch (error) {
+            console.error("Gagal sinkronisasi Cloud:", error);
+            showToast('Gagal terhubung ke Cloud.', 'danger');
+            if(DOM.saveStatusText) DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-cloud-xmark text-danger me-1"></i> Offline';
+        } finally {
+            DOM.loadingMatrix.classList.add('d-none');
+            DOM.tblMatrix.classList.remove('d-none');
+            DOM.loadingCompare.classList.add('d-none');
+            DOM.tblCompare.classList.remove('d-none');
+        }
     }
 
     async function fetchDefaultCategoryA() {
@@ -127,46 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCategoryA();
             AppState.data = extractCategoryAFromDOM(); 
         } catch (error) {
-            console.warn('Gagal memuat data.json, menggunakan fallback DOM.', error);
             AppState.data = extractCategoryAFromDOM();
         }
     }
 
     // ==========================================================================
-    // CATEGORY B: SPREADSHEET API LOGIC (READ-ONLY)
+    // RENDER LOGIC
     // ==========================================================================
-    async function fetchGoogleSpreadsheetData() {
-        if (!AppState.externalTablesLoaded) {
-            DOM.tblMatrix.classList.add('d-none');
-            DOM.loadingMatrix.classList.remove('d-none');
-            DOM.tblCompare.classList.add('d-none');
-            DOM.loadingCompare.classList.remove('d-none');
-        }
-
-        try {
-            const response = await fetch(SPREADSHEET_API_URL);
-            const apiData = await response.json();
-
-            if (apiData.status === "success") {
-                renderReadonlyTables(apiData.matrixTable, apiData.compareTable);
-                AppState.externalTablesLoaded = true;
-                showToast('Tabel tersinkronisasi dengan Spreadsheet', 'success');
-            } else {
-                throw new Error("Invalid API Response");
-            }
-        } catch (error) {
-            console.error("Gagal sinkronisasi Spreadsheet:", error);
-            showToast('Gagal memuat tabel dari Google Sheets.', 'danger');
-        } finally {
-            DOM.loadingMatrix.classList.add('d-none');
-            DOM.tblMatrix.classList.remove('d-none');
-            DOM.loadingCompare.classList.add('d-none');
-            DOM.tblCompare.classList.remove('d-none');
-        }
-    }
-
     function renderReadonlyTables(matrixData, compareData) {
-        // Render Matriks menggunakan HTML Template
         const tplMatrix = document.getElementById('tplMatrixRow').content;
         DOM.tblMatrixBody.innerHTML = '';
         if (matrixData && matrixData.length > 0) {
@@ -185,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Render Perbandingan menggunakan HTML Template
         const tplCompare = document.getElementById('tplCompareRow').content;
         DOM.tblCompareBody.innerHTML = '';
         if (compareData && compareData.length > 0) {
@@ -202,9 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ==========================================================================
-    // CATEGORY A: EDITABLE TEXT LOGIC
-    // ==========================================================================
     function renderCategoryA() {
         if (!AppState.data || AppState.isEditing) return;
 
@@ -236,7 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function extractCategoryAFromDOM() {
         const newData = AppState.data ? { ...AppState.data } : {};
-
         const safeGet = (key) => sanitizeHTML(document.querySelector(`[data-key="${key}"]`)?.innerHTML || '');
         
         newData.headerBadge = safeGet("headerBadge");
@@ -260,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // AUTOSAVE & EVENTS
+    // CLOUD SAVING (REPLACES LOCALSTORAGE)
     // ==========================================================================
     function setupGlobalEventDelegation() {
         if(!DOM.documentPage) return;
@@ -277,21 +266,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function triggerAutoSave() {
         if(!DOM.saveStatusText) return;
-        DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-warning me-1"></i> Menyimpan Teks...';
+        DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-warning me-1"></i> Menunggu...';
         clearTimeout(AppState.autoSaveTimer);
         AppState.autoSaveTimer = setTimeout(() => {
-            saveToLocalStorage(false);
+            saveToCloud(false);
             pushHistoryState();
-            DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-check-circle text-success me-1"></i> Teks tersimpan';
         }, AppState.autoSaveDelay);
     }
 
-    function saveToLocalStorage(notify = true) {
+    async function saveToCloud(notify = true) {
+        if(!DOM.saveStatusText) return;
+        DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-primary me-1"></i> Mengirim ke Cloud...';
+        
         AppState.data = extractCategoryAFromDOM();
-        localStorage.setItem('ecoval_doc_text_data', JSON.stringify(AppState.data));
-        if (notify) showToast('Teks tersimpan dengan aman.', 'success');
+        
+        try {
+            const response = await fetch(SPREADSHEET_API_URL, {
+                method: "POST",
+                redirect: "follow",
+                headers: { "Content-Type": "text/plain;charset=utf-8" }, // Mencegah pemblokiran CORS Preflight
+                body: JSON.stringify(AppState.data)
+            });
+            const result = await response.json();
+            
+            if(result.status === "success") {
+                if (notify) showToast('Teks tersimpan di Cloud', 'success');
+                DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-cloud-arrow-up text-success me-1"></i> Tersimpan di Cloud';
+            } else {
+                throw new Error("API Error");
+            }
+        } catch (e) {
+            console.error("Gagal simpan ke cloud:", e);
+            showToast('Koneksi internet bermasalah. Gagal menyimpan.', 'danger');
+            DOM.saveStatusText.innerHTML = '<i class="fa-solid fa-cloud-xmark text-danger me-1"></i> Gagal menyimpan';
+        }
     }
 
+    // ==========================================================================
+    // HISTORY & UI
+    // ==========================================================================
     function pushHistoryState() {
         const currentData = JSON.stringify(extractCategoryAFromDOM());
         if (AppState.historyIndex >= 0 && AppState.history[AppState.historyIndex] === currentData) return;
@@ -309,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
             AppState.isEditing = false;
             renderCategoryA();
             updateUndoRedoUI();
-            showToast('Teks diurungkan', 'dark');
+            saveToCloud(false); // Kirim undo ke cloud
         }
     }
 
@@ -320,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
             AppState.isEditing = false;
             renderCategoryA();
             updateUndoRedoUI();
-            showToast('Teks diulangi', 'dark');
+            saveToCloud(false); // Kirim redo ke cloud
         }
     }
 
@@ -330,25 +343,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setupToolbarEvents() {
-        if(DOM.btnSyncApi) DOM.btnSyncApi.addEventListener('click', fetchGoogleSpreadsheetData);
-        if(DOM.btnSave) DOM.btnSave.addEventListener('click', () => saveToLocalStorage(true));
+        if(DOM.btnSyncApi) DOM.btnSyncApi.addEventListener('click', () => {
+            showToast('Menyinkronkan data Cloud...', 'dark');
+            fetchGoogleSpreadsheetData();
+        });
+        if(DOM.btnSave) DOM.btnSave.addEventListener('click', () => saveToCloud(true));
         if(DOM.btnLoad) DOM.btnLoad.addEventListener('click', () => {
-            const saved = localStorage.getItem('ecoval_doc_text_data');
-            if (saved) {
-                AppState.data = JSON.parse(saved);
-                AppState.isEditing = false;
-                renderCategoryA();
-                pushHistoryState();
-                showToast('Teks dimuat ulang', 'success');
-            }
+            fetchGoogleSpreadsheetData();
+            showToast('Memuat ulang teks dari Cloud', 'success');
         });
         if(DOM.btnReset) DOM.btnReset.addEventListener('click', async () => {
-            if (confirm('Aksi ini akan menghapus teks lokal. Lanjutkan?')) {
-                localStorage.removeItem('ecoval_doc_text_data');
+            if (confirm('Aksi ini akan me-reset teks Anda ke bawaan pabrik dan menghapus yang di Cloud. Lanjutkan?')) {
                 AppState.isEditing = false;
                 await fetchDefaultCategoryA();
+                saveToCloud(true);
                 pushHistoryState();
-                showToast('Teks direset ke bawaan.', 'info');
+                showToast('Teks direset.', 'info');
             }
         });
         
@@ -356,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
             AppState.data = extractCategoryAFromDOM();
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState.data, null, 2));
             const a = document.createElement('a');
-            a.href = dataStr; a.download = "Doc_Notes.json"; a.click();
+            a.href = dataStr; a.download = "EcoVal_Cloud_Backup.json"; a.click();
         });
         
         if(DOM.btnImportJson) DOM.btnImportJson.addEventListener('click', () => DOM.fileInputJson.click());
@@ -370,8 +380,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     AppState.isEditing = false;
                     renderCategoryA();
                     pushHistoryState();
-                    saveToLocalStorage(false);
-                    showToast('Data teks diimpor', 'success');
+                    saveToCloud(true);
+                    showToast('Data teks diimpor dan dikirim ke Cloud', 'success');
                 } catch (err) { showToast('Format JSON salah.', 'danger'); }
             };
             reader.readAsText(file);
@@ -400,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 AppState.isEditing = false;
                 renderCategoryA();
                 pushHistoryState();
-                triggerAutoSave();
+                saveToCloud(false);
             }
         });
 
@@ -412,11 +422,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 AppState.isEditing = false;
                 renderCategoryA();
                 pushHistoryState();
-                triggerAutoSave();
+                saveToCloud(false);
             });
         }
     }
 
+    // (Fungsi-fungsi pencarian & UI di bawah ini tidak berubah)
     function handleSearch() {
         if(!DOM.searchInput || !DOM.documentPage) return;
         const query = DOM.searchInput.value.trim().toLowerCase();
@@ -436,7 +447,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (matches > 0) showToast(`Ditemukan ${matches} kecocokan.`, 'dark');
     }
-
     function clearSearchHighlights() {
         if(!DOM.documentPage) return;
         DOM.documentPage.querySelectorAll('mark.search-highlight').forEach(mark => {
@@ -445,22 +455,18 @@ document.addEventListener('DOMContentLoaded', () => {
             parent.normalize();
         });
     }
-
     function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-
     function toggleTheme() {
         const newTheme = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
         document.body.setAttribute('data-theme', newTheme);
         localStorage.setItem('ecoval_theme', newTheme);
         if(DOM.themeIcon) DOM.themeIcon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
-
     function loadThemePreference() {
         const savedTheme = localStorage.getItem('ecoval_theme') || 'light';
         document.body.setAttribute('data-theme', savedTheme);
         if(DOM.themeIcon) DOM.themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
-
     function setZoom(delta) {
         if(!DOM.documentPage || !DOM.zoomLabel) return;
         AppState.currentZoom = Math.min(Math.max(AppState.currentZoom + delta, 70), 140);
@@ -468,7 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
         DOM.documentPage.style.transformOrigin = 'top center';
         DOM.zoomLabel.textContent = `${AppState.currentZoom}%`;
     }
-
     function showToast(message, type = 'dark') {
         if (!bsToast || !DOM.toastMessage) return;
         DOM.toastMessage.textContent = message;
